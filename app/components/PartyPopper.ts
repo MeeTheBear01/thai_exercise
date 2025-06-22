@@ -1,4 +1,3 @@
-// components/PartyPopper.tsx
 "use client";
 
 import confetti from "canvas-confetti";
