@@ -48,9 +48,5 @@ export const PartyPopper = (props: { play: boolean }) => {
     }
   }, [play]);
 
-  // return (
-    // <button className="btn btn-primary" onClick={fireConfetti}>
-    //   🎉 ยิงพลุ!
-    // </button>
-  // );
+  return null;
 };
