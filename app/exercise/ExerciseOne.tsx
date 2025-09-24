@@ -112,7 +112,7 @@ const ExcerciseOne = () => {
             .then((res) => res.json())
             .then((data) => {
                 setAlphabet(data);
-                setIsReady(true); // โหลดเสร็จค่อย render UI
+                setIsReady(true);
             });
 
         const mediaQuery = window.matchMedia("(max-width: 639px)");
