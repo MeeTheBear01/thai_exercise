@@ -24,26 +24,42 @@
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
+}
+
+@media (max-width: 640px) {
+    .game-controls {
+        top: 10px;
+        left: 10px;
+        flex-direction: row;
+        width: calc(100% - 20px);
+        justify-content: space-between;
+    }
+    
+    .control-btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
 }
 
 .control-btn {
     padding: 10px 20px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-    background: rgba(255, 255, 255, 0.8);
-    border: 3px solid #fff;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #fff;
     border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
+    white-space: nowrap;
 }
 
 .control-btn:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     background: white;
 }
 
@@ -74,46 +90,58 @@
     top: 20px;
     right: 20px;
     z-index: 100;
-    width: 500px;
+    width: clamp(140px, 20vw, 400px);
+}
+
+@media (max-width: 640px) {
+    .power-tube-container {
+        top: 60px; /* Adjust to not overlap with horizontal controls */
+        right: 10px;
+    }
 }
 
 .power-tube-bg {
     width: 100%;
     height: auto;
     display: block;
-    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
 .stats-overlay {
     position: absolute;
-    top: 25%;
-    left: 10%;
-    right: 10%;
-    bottom: 15%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
-    align-items: flex-end;
-    transform: rotate(90deg) translate(88px, -36px);
+    /* We use percentage-based positioning inside the container */
+    transform: rotate(90deg) translate(30%, 9%);
+    transform-origin: center;
 }
 
 .stat-slot {
     width: 3%;
-    height: 100%;
+    height: 61%;
     background: rgba(0, 0, 0, 0.4);
-    border-radius: 20px;
+    border-radius: 10px;
     display: flex;
     align-items: flex-end;
-    margin-right: 52px;
+    margin-right: 10.5%; /* Relative spacing */
     overflow: hidden;
     position: relative;
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.stat-slot:nth-child(2) {
+  margin-right: 9%;
 }
 
 .bar {
     width: 100%;
     transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    border-radius: 20px 20px 0 0;
-    box-shadow: inset -3px 0 6px rgba(0, 0, 0, 0.3), inset 3px 0 6px rgba(255, 255, 255, 0.3);
+    border-radius: 10px 10px 0 0;
+    box-shadow: inset -1px 0 3px rgba(0, 0, 0, 0.3), inset 1px 0 3px rgba(255, 255, 255, 0.3);
 }
 
 .bar::after {
@@ -132,8 +160,17 @@
 .strength { background: linear-gradient(to right, #003a8c, #1890ff, #91d5ff, #003a8c); }
 
 @media (max-width: 1024px) {
-    .power-tube-container { width: 180px; }
+    .stats-overlay {
+        transform: rotate(90deg) translate(30%, 9.2%);
+    }
 }
+
 @media (max-width: 640px) {
-    .power-tube-container { width: 140px; }
+    .stats-overlay {
+        transform: rotate(90deg) translate(30%, 9.5%);
+    }
+    .stat-slot {
+        margin-right: 10.2%;
+    }
 }
+

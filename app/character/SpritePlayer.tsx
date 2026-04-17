@@ -47,6 +47,14 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
     const bgMusicUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3';
     const eatingSprite = '/Gemini_Generated_Image_eeemraeeemraeeem.png'; // รูปกินอาหารที่คุณให้มา
 
+    // คำนวณ Scale ตามขนาดหน้าจอ
+    const getScale = () => {
+        if (screenWidth < 640) return 1.5;
+        if (screenWidth < 1024) return 2;
+        return 3;
+    };
+    const characterScale = getScale();
+
     useEffect(() => {
         const updateWidth = () => setScreenWidth(window.innerWidth);
         updateWidth();
@@ -96,12 +104,13 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
             if (!isEating) {
                 setPosX(prev => {
                     const nextX = prev + speed * direction;
-                    if (nextX > screenWidth - frameWidth * 3) {
+                    const charWidth = frameWidth * characterScale;
+                    if (nextX > screenWidth - charWidth) {
                         setDirection(-1);
-                        return prev;
+                        return screenWidth - charWidth;
                     } else if (nextX < 0) {
                         setDirection(1);
-                        return prev;
+                        return 0;
                     }
                     return nextX;
                 });
@@ -111,7 +120,7 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
         return () => {
             if (intervalRef.current) clearInterval(intervalRef.current);
         };
-    }, [fps, frameCount, speed, direction, screenWidth, frameWidth, isEating]);
+    }, [fps, frameCount, speed, direction, screenWidth, frameWidth, isEating, characterScale]);
 
     const toggleMusic = () => {
         if (!audioRef.current) return;
@@ -164,9 +173,9 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
                     backgroundImage: `url(${isEating ? eatingSprite : src})`, // สลับรูป Sprite
                     backgroundPosition: `-${frame * (isEating ? (1024 / 4) : frameWidth)}px 0px`, // คำนวณตำแหน่งเฟรมกิน (สมมติรูปกว้าง 1024px)
                     backgroundSize: isEating ? 'auto 100%' : `${frameWidth * frameCount}px ${frameHeight}px`,
-                    transform: `translate(${posX}px, 100px) scale(${3 * direction}, 3)`,
+                    transform: `translate(${posX}px, 0) scale(${characterScale * direction}, ${characterScale})`,
                     left: 0,
-                    bottom: '20%',
+                    bottom: '15%',
                     position: 'absolute',
                 }}
             />
