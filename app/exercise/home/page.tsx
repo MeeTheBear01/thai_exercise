@@ -1,21 +1,11 @@
-<<<<<<< HEAD
-import HomePage from "./Home/page";
-=======
 "use client";
 import Image from "next/image";
 import Exercise1 from "@/public/img/Exercise_1.png";
-import ClientButton from "./components/ClientButton";
-import "./css/styles.css";
->>>>>>> dev
+import ClientButton from "@/app/components/ClientButton";
+import "../../css/styles.css"
 
-const index = () => {
+export default function Home() {
   return (
-<<<<<<< HEAD
-    <HomePage/>
-  );
-}
-export default index;
-=======
     <div className="min-h-screen bg-kids-pattern flex flex-col items-center justify-center p-4 md:p-8">
       {/* Decorative Elements */}
       <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-300 rounded-full blur-3xl opacity-50 animate-pulse"></div>
@@ -69,4 +59,3 @@ export default index;
     </div>
   );
 }
->>>>>>> dev
