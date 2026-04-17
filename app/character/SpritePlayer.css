@@ -1,4 +1,139 @@
+.game-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
 .sprite-player {
-  image-rendering: pixelated;
-  background-size: auto;
+    image-rendering: pixelated;
+    transition: transform 200ms linear;
+    transform-origin: center center;
+}
+
+/* 🎮 Game Controls Layout */
+.game-controls {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.control-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.8);
+    border: 3px solid #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn:hover {
+    transform: scale(1.1);
+    background: white;
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+.eat-btn {
+    background: #ff9f43;
+    color: white;
+    border-color: #ff9f43;
+}
+
+.eat-btn.active {
+    background: #ee5253;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* 🧪 Power Tube Container */
+.power-tube-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    width: 500px;
+}
+
+.power-tube-bg {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+}
+
+.stats-overlay {
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    right: 10%;
+    bottom: 15%;
+    display: flex;
+    align-items: flex-end;
+    transform: rotate(90deg) translate(88px, -36px);
+}
+
+.stat-slot {
+    width: 3%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    display: flex;
+    align-items: flex-end;
+    margin-right: 52px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.bar {
+    width: 100%;
+    transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border-radius: 20px 20px 0 0;
+    box-shadow: inset -3px 0 6px rgba(0, 0, 0, 0.3), inset 3px 0 6px rgba(255, 255, 255, 0.3);
+}
+
+.bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    width: 25%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.hunger { background: linear-gradient(to right, #800000, #ff4d4f, #ff7875, #800000); }
+.energy { background: linear-gradient(to right, #856600, #fadb14, #fffb8f, #856600); }
+.hygiene { background: linear-gradient(to right, #135200, #52c41a, #b7eb8f, #135200); }
+.strength { background: linear-gradient(to right, #003a8c, #1890ff, #91d5ff, #003a8c); }
+
+@media (max-width: 1024px) {
+    .power-tube-container { width: 180px; }
+}
+@media (max-width: 640px) {
+    .power-tube-container { width: 140px; }
 }

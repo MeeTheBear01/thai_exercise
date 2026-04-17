@@ -2,7 +2,8 @@
 import Image from "next/image";
 import Exercise1 from "@/public/img/Exercise_1.png";
 import ClientButton from "@/app/components/ClientButton";
-import "../../css/styles.css"
+import "../../css/styles.css";
+
 
 export default function Home() {
   return (
