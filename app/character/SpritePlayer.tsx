@@ -22,12 +22,25 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
     speed = 4,
 }) => {
     const [frame, setFrame] = useState<number>(0);
-    const [posX, setPosX] = useState<number>(400);
+    const [posX, setPosX] = useState<number>(0);
     const [direction, setDirection] = useState<number>(1);
+    const [screenWidth, setScreenWidth] = useState<number>(0);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const backgroundImg = '/img/background-forest.png';
+
     useEffect(() => {
+        const updateWidth = () => {
+            setScreenWidth(window.innerWidth);
+        };
+        updateWidth();
+        window.addEventListener('resize', updateWidth);
+        return () => window.removeEventListener('resize', updateWidth);
+    }, []);
+
+    useEffect(() => {
+        if (screenWidth === 0) return;
+
         const frameDuration = 1000 / fps;
 
         intervalRef.current = setInterval(() => {
@@ -38,13 +51,13 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
 
             setPosX(prev => {
                 const nextX = prev + speed * direction;
-                // ถ้าเดินเลยขอบหน้าจอ (หน้าจอขนาด 800px สมมติ)
-                if (nextX > 800) {
+                // ถ้าเดินเลยขอบหน้าจอ
+                if (nextX > screenWidth - frameWidth * 3) {
                     setDirection(-1); // เปลี่ยนทิศทางเดินกลับ
-                    return 800; // อยู่ที่ขอบขวา
-                } else if (nextX < 400) {
+                    return screenWidth - frameWidth * 3;
+                } else if (nextX < 0) {
                     setDirection(1); // เปลี่ยนทิศทางเดินไปขวา
-                    return 400; // อยู่ที่ขอบซ้าย
+                    return 0;
                 }
                 return nextX;
             });
@@ -55,18 +68,20 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
                 clearInterval(intervalRef.current);
             }
         };
-    }, [fps, frameCount, loop, speed, direction]);
+    }, [fps, frameCount, loop, speed, direction, screenWidth, frameWidth]);
 
     return (
         <div style={{
             display: 'flex',
-            justifyContent: 'flex-start', // เดินจากซ้ายไปขวา
-            alignItems: 'center',         // ✅ จัดให้กลางแนวดิ่ง
-            height: '100vh',              // ✅ เต็มความสูงจอ
-            overflow: 'hidden',           // ป้องกันภาพล้น
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            height: '100vh',
+            width: '100vw',
+            overflow: 'hidden',
             background: `url(${backgroundImg})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            position: 'relative',
         }}>
             <div
                 className="sprite-player"
@@ -77,9 +92,12 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
                     backgroundPosition: `-${frame * frameWidth}px 0px`,
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: `${frameWidth * frameCount}px ${frameHeight}px`,
-                    transform: `translate(${posX}px, 100px) scale(${3 * direction}, 3)`,  // เลื่อนตำแหน่ง X
-                    transition: `transform ${1000 / fps}ms linear`,  // ทำให้เดินนุ่มนวล
+                    transform: `translate(${posX}px, 100px) scale(${3 * direction}, 3)`,
+                    transition: `transform ${1000 / fps}ms linear`,
                     transformOrigin: 'center center',
+                    position: 'absolute',
+                    left: 0,
+                    bottom: '20%', // ปรับตำแหน่งตัวละครให้อยู่บนพื้น
                 }}
             />
         </div>
