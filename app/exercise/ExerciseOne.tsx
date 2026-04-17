@@ -168,7 +168,7 @@ const ExcerciseOne = () => {
                       status="active" 
                       strokeColor={{ '0%': '#10b981', '100%': '#3b82f6' }}
                       // แก้ไข Warning: ใช้ size แทน strokeWidth ในบางเวอร์ชันของ antd5 หรือกำหนดค่าแบบ object
-                      size={[undefined, 15]} 
+                      size={["100%", 15]} 
                     />
                     <p className="text-center font-bold text-slate-500 mt-1">ข้อที่ {questionCount} / 10</p>
                 </div>
