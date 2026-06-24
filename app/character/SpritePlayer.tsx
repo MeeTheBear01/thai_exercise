@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from "next/navigation";
 import './SpritePlayer.css';
 import PowerTune from '../components/PowerTune';
 
@@ -27,11 +28,9 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
     const [direction, setDirection] = useState<number>(1);
     const [screenWidth, setScreenWidth] = useState<number>(0);
     const [isMuted, setIsMuted] = useState<boolean>(true);
-    
-    // 🍔 State สำหรับการกิน
+
     const [isEating, setIsEating] = useState<boolean>(false);
-    
-    // 📊 Tamagotchi Stats
+
     const [stats, setStats] = useState({
         hunger: 80,
         energy: 90,
@@ -39,15 +38,15 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
         strength: 100
     });
 
+    const router = useRouter();
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const statsIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    const backgroundImg = '/img/background-forest.png'; 
+    const backgroundImg = '/img/background-forest.png';
     const bgMusicUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3';
     const eatingSprite = '/Gemini_Generated_Image_eeemraeeemraeeem.png'; // รูปกินอาหารที่คุณให้มา
 
-    // คำนวณ Scale ตามขนาดหน้าจอ
     const getScale = () => {
         if (screenWidth < 640) return 1.5;
         if (screenWidth < 1024) return 2;
@@ -59,8 +58,7 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
         const updateWidth = () => setScreenWidth(window.innerWidth);
         updateWidth();
         window.addEventListener('resize', updateWidth);
-        
-        // Setup BGM
+
         audioRef.current = new Audio(bgMusicUrl);
         audioRef.current.loop = true;
         audioRef.current.volume = 0.2;
@@ -74,7 +72,6 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
         };
     }, []);
 
-    // 🕒 ระบบลดค่าพลังงาน (Stats Decay)
     useEffect(() => {
         statsIntervalRef.current = setInterval(() => {
             setStats(prev => ({
@@ -90,17 +87,14 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
         };
     }, []);
 
-    // 🚶 แอนิเมชันเดินและกิน
     useEffect(() => {
         if (screenWidth === 0) return;
         const frameDuration = 1000 / fps;
-        
+
         intervalRef.current = setInterval(() => {
-            // จัดการเฟรม (ถ้ากินใช้ 4 เฟรม ถ้าเดินใช้ frameCount จาก props)
             const currentMaxFrames = isEating ? 4 : frameCount;
             setFrame(prev => (prev + 1) % currentMaxFrames);
 
-            // จัดการการเดิน (เดินเฉพาะตอนไม่ได้กิน)
             if (!isEating) {
                 setPosX(prev => {
                     const nextX = prev + speed * direction;
@@ -129,42 +123,43 @@ const SpritePlayer: React.FC<SpritePlayerProps> = ({
         setIsMuted(!isMuted);
     };
 
-    // 🍱 ฟังก์ชันกินอาหาร
     const handleEat = () => {
         if (isEating) return;
         setIsEating(true);
-        setFrame(0); // เริ่มเฟรมแรกของการกิน
-        
-        // เพิ่มค่าความหิว
+        setFrame(0);
+
         setStats(prev => ({ ...prev, hunger: Math.min(100, prev.hunger + 20) }));
 
-        // กินเสร็จใน 2 วินาทีแล้วกลับไปเดิน
         setTimeout(() => {
             setIsEating(false);
             setFrame(0);
         }, 2000);
     };
 
+    const handleExercise = () => {
+        router.push('/exercise/exercise_one');
+    };
+
     return (
         <div className="game-container" style={{ backgroundImage: `url(${backgroundImg})` }}>
-            
-            {/* 🎵 UI Buttons */}
+
             <div className="game-controls">
                 <button className="control-btn music-btn" onClick={toggleMusic}>
                     {isMuted ? '🔇' : '🔊'}
                 </button>
-                <button 
-                    className={`control-btn eat-btn ${isEating ? 'active' : ''}`} 
+                <button
+                    className={`control-btn eat-btn ${isEating ? 'active' : ''}`}
                     onClick={handleEat}
                 >
                     🍱 กินอาหาร
                 </button>
+                <button className="control-btn exercise-btn" onClick={handleExercise}>
+                    🏃 ฝึกสมอง
+                </button>
             </div>
 
-            {/* 🔋 Power Tube UI */}
             <PowerTune stats={stats} />
 
-            {/* Character ( Froakie ) */}
             <div
                 className="sprite-player"
                 style={{
